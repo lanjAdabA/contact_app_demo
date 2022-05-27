@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'listhome.dart';
+import 'user.model.dart';
 
 void main() {
   runApp(const MyApp());
@@ -35,6 +36,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final phonecontroller = TextEditingController();
   String name = "";
   String phone = "";
+
   @override
   void initState() {
     super.initState();
@@ -46,8 +48,9 @@ class _MyHomePageState extends State<MyHomePage> {
     super.dispose();
   }
 
-  List<Map<String, dynamic>> contacts = [];
+  //List<Map<String, dynamic>> contacts = [];
 
+  List<Person> contacts = [];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -58,15 +61,14 @@ class _MyHomePageState extends State<MyHomePage> {
           itemCount: contacts.length,
           itemBuilder: ((context, index) {
             return ContactCard(
-                name: contacts[index]['name'].toString(),
-                phone: contacts[index]["phone"].toString());
+                name: contacts[index].name, phone: contacts[index].phone);
           })),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          // ignore: unused_local_variable
           final name = await openDialog();
           setState(() {
-            contacts.add(
-                {'name': namecontroller.text, 'phone': phonecontroller.text});
+            contacts.add(Person(namecontroller.text, phonecontroller.text));
           });
         },
         splashColor: Colors.red,
@@ -104,8 +106,14 @@ class _MyHomePageState extends State<MyHomePage> {
                     mainAxisAlignment: MainAxisAlignment.end,
                     children: [
                       TextButton(
-                        onPressed: submit,
+                        onPressed: () {
+                          //   contacts.add(Person(name, phone));
+                          submit();
+                        },
                         child: const Text("Add"),
+
+                        /*  onPressed: submit,
+                        child: const Text("Add"), */
                       ),
                     ],
                   )
@@ -116,5 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   void submit() {
     Navigator.of(context).pop(namecontroller.text);
+    // namecontroller.clear();
+    // phonecontroller.clear();
   }
 }
