@@ -1,22 +1,37 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 
 class ContactListView extends StatelessWidget {
+  final String name;
+  final String phone;
   const ContactListView({
     Key? key,
+    required this.name,
+    required this.phone,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
-        itemCount: 3,
-        itemBuilder: (context, index) {
-          return const ContactCard();
-        });
+    {
+      return ContactCard(
+        name: '',
+        phone: '',
+      );
+    }
   }
 }
 
+// ignore: must_be_immutable
 class ContactCard extends StatefulWidget {
-  const ContactCard({Key? key}) : super(key: key);
+  final String name;
+
+  String phone;
+
+  ContactCard({
+    Key? key,
+    required this.name,
+    required this.phone,
+  }) : super(key: key);
 
   @override
   State<ContactCard> createState() => _ContactCardState();
@@ -42,11 +57,13 @@ class _ContactCardState extends State<ContactCard> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
-                    "  ibobi",
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                  Text(
+                    "Name : ${widget.name}",
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
-                  Text("name"),
+                  Text(
+                    "Phone : ${widget.phone}",
+                  ),
                 ],
               ),
             ],

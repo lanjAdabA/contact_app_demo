@@ -31,19 +31,22 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  late TextEditingController controller;
+  final namecontroller = TextEditingController();
+  final phonecontroller = TextEditingController();
   String name = "";
+  String phone = "";
   @override
   void initState() {
     super.initState();
-    controller = TextEditingController();
   }
 
   @override
   void dispose() {
-    controller.dispose();
+    namecontroller.dispose();
     super.dispose();
   }
+
+  List<Map<String, dynamic>> contacts = [];
 
   @override
   Widget build(BuildContext context) {
@@ -51,14 +54,22 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: const Text("contact app"),
       ),
-      body: const ContactListView(),
+      body: ListView.builder(
+          itemCount: contacts.length,
+          itemBuilder: ((context, index) {
+            return ContactCard(
+                name: contacts[index]['name'].toString(),
+                phone: contacts[index]["phone"].toString());
+          })),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           final name = await openDialog();
-          if (name == null || name.isEmpty) return;
-          setState(() => this.name = name);
+          setState(() {
+            contacts.add(
+                {'name': namecontroller.text, 'phone': phonecontroller.text});
+          });
         },
-        splashColor: Colors.green,
+        splashColor: Colors.red,
         child: const Icon(Icons.add),
       ),
     );
@@ -76,13 +87,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   Column(
                     children: [
                       TextField(
-                        controller: controller,
+                        controller: namecontroller,
                         autofocus: true,
                         decoration: const InputDecoration(hintText: "Name:"),
                       ),
-                      const TextField(
+                      TextField(
+                        keyboardType: TextInputType.phone,
+                        controller: phonecontroller,
                         autofocus: true,
-                        decoration: InputDecoration(hintText: "Phone Number:"),
+                        decoration:
+                            const InputDecoration(hintText: "Phone Number:"),
                       ),
                     ],
                   ),
@@ -101,6 +115,6 @@ class _MyHomePageState extends State<MyHomePage> {
           ));
 
   void submit() {
-    Navigator.of(context).pop(controller.text);
+    Navigator.of(context).pop(namecontroller.text);
   }
 }
